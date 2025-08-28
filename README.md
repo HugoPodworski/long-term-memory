@@ -14,7 +14,8 @@ Build a production-ready voice agent backend that adds long-term memory to conve
 
 ## Requirements
 - Python 3.10+
-- A Cerebras API key
+- A Cerebras API key (`CEREBRAS_API_KEY`)
+- A Mem0 API key (`MEM0_API_KEY`)
 - (Optional) An ngrok account and auth token for stable public URLs
 
 ## Quickstart
@@ -25,9 +26,10 @@ python3 -m venv .venv && source .venv/bin/activate
 # 2) Install dependencies
 pip install -r requirements.txt
 
-# 3) Set environment variables
+# 3) Set environment variables (or copy .env.example to .env)
 # Required
 export CEREBRAS_API_KEY="YOUR_CEREBRAS_API_KEY"
+export MEM0_API_KEY="YOUR_MEM0_API_KEY"
 # Optional but recommended for stable ngrok URLs
 # export NGROK_AUTHTOKEN="YOUR_NGROK_TOKEN"
 
@@ -39,25 +41,8 @@ You will see a line like:
 Public URL: https://<random-subdomain>.ngrok.io
 ```
 
-## API
-- POST `/chat/completions`
-  - Request body mirrors OpenAI Chat Completions. Minimal example:
-  ```json
-  {
-    "messages": [
-      {"role": "user", "content": "Hello"}
-    ],
-    "model": "qwen-3-235b-a22b-instruct-2507",
-    "stream": true,
-    "max_tokens": 250,
-    "temperature": 1.0,
-    "top_p": 1.0
-  }
-  ```
-  - Response is `text/event-stream` with SSE events. The first event is skipped internally to compute TTFT; subsequent events contain standard OpenAI-compatible chunks.
-
-- GET `/health`
-  - Returns `{ "status": "healthy", "timestamp": <unix-seconds> }`
+## Endpoints
+- `POST /chat/completions` and `GET /health` are exposed. When using Vapi's Custom LLM, Vapi handles the request/response format for you—you don't need to craft payloads manually.
 
 ## How memory works
 - Before generation, the last few user/assistant turns are summarized into a query
@@ -76,8 +61,8 @@ Public URL: https://<random-subdomain>.ngrok.io
 
 ## Environment variables
 - `CEREBRAS_API_KEY` (required): API key for Cerebras
+- `MEM0_API_KEY` (required): API key for Mem0
 - `NGROK_AUTHTOKEN` (optional): if set, ngrok uses your account for stable domains
-- `MEM0_*` (optional): if you use hosted Mem0, set the variables required by `mem0ai`
 
 ## Development notes
 - Default model: `qwen-3-235b-a22b-instruct-2507` (change in `main.py`)
