@@ -53,11 +53,9 @@ Public URL: https://<random-subdomain>.ngrok.io
 1. Start this server and note the ngrok public URL
 2. In Vapi, create/update an Agent:
    - Provider: Custom LLM
-   - URL: `https://<your-ngrok-domain>/chat/completions`
-   - Method: POST
-   - Streaming: SSE
-   - Body: forward the OpenAI-style `messages` array (Vapi also sends caller info; this server will map `customer.number` when present to a deterministic `user_id` for memory)
-3. Test a call; you should see streaming text and memory improving over time
+   - URL: `https://<your-ngrok-domain>` (the /chat/completions will be auto added by VAPI)
+   - Model: Any model you want!
+3. Test a call; you should see get a audio response
 
 ## Environment variables
 - `CEREBRAS_API_KEY` (required): API key for Cerebras
